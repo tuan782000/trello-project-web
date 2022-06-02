@@ -1,5 +1,5 @@
-import React from "react";
-import './App.scss';
+import React from 'react'
+import './App.scss'
 
 // custom component
 import AppBar from 'components/AppBar/AppBar'
