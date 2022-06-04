@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Container, Draggable } from 'react-smooth-dnd'
 import {
   Container as BootstrapContainer,
-  Row, Col, Form, Button
+  Row, Col, Form, Button, NavItem
 } from 'react-bootstrap'
 import { isEmpty } from 'lodash'
 
@@ -102,6 +102,26 @@ function BoardContent() {
     toggleOpenNewCloumnForm()
   }
 
+  const onUpdateColumn = (newColumnToUpdate) => {
+    const columnIdToUpdate = newColumnToUpdate.id
+    let newColumns = [...columns]
+    const columnIndexToUpdate = newColumns.findIndex(i => i.id === columnIdToUpdate)
+    if (newColumnToUpdate._destroy) {
+      // remove column
+      newColumns.splice(columnIndexToUpdate, 1)
+    } else {
+      // update column info
+      newColumns.splice(columnIndexToUpdate,1, newColumnToUpdate)
+    }
+
+    let newBoard = { ...board }
+    newBoard.columnOrder = newColumns.map( c => c.id)
+    newBoard.columns = newColumns
+
+    setColumns(newColumns)
+    setBoard(newBoard)
+  }
+
   return (
     <div className='board-content'>
       <Container
@@ -117,7 +137,7 @@ function BoardContent() {
       >
         {columns.map((column, index) => (
           <Draggable key={index}>
-            <Column column={column} onCardDrop={onCardDrop} />
+            <Column column={column} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn} />
           </Draggable>
         ))}
       </Container>
