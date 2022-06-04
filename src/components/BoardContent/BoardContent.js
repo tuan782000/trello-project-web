@@ -111,7 +111,7 @@ function BoardContent() {
       newColumns.splice(columnIndexToUpdate, 1)
     } else {
       // update column info
-      newColumns.splice(columnIndexToUpdate,1, newColumnToUpdate)
+      newColumns.splice(columnIndexToUpdate, 1, newColumnToUpdate)
     }
 
     let newBoard = { ...board }
