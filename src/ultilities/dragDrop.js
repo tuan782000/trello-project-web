@@ -1,8 +1,5 @@
 /**
  * Created by tuannguyen's author on 02/26/2021
- * ---
- * Order an array of objects based on another array order
- * ---
  *
  */
 
