@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { Dropdown, Form, Button } from 'react-bootstrap'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, update } from 'lodash'
 
 import './Column.scss'
 import { mapOrder } from 'ultilities/sorts'
@@ -62,6 +62,11 @@ function Column(props) {
         ...column,
         title: columnTitle
       }
+      //call api update column
+      updateColumn(newColumn._id, newColumn).then(updatedColumn => {
+        updatedColumn.cards = newColumn.cards
+        onUpdateColumnState(updatedColumn)
+      })
     }
   }
 
@@ -69,24 +74,23 @@ function Column(props) {
     if (!newCardTitle) {
       newCardTextareaRef.current.focus()
       return
+    } else {
+      const newCardToAdd = {
+        boardId: column.boardId,
+        columnId: column._id,
+        title: newCardTitle.trim()
+      }
+      //Call API
+      createNewCard(newCardToAdd).then(card => {
+        let newColumn = cloneDeep(column)
+        newColumn.cards.push(card)
+        newColumn.cardOrder.push(card._id)
+
+        onUpdateColumnState(newColumn)
+        setNewCardTitle('')
+        toggleOpenNewCardForm()
+      })
     }
-
-    const newCardToAdd = {
-      boardId: column.boardId,
-      columnId: column._id,
-      title: newCardTitle.trim()
-    }
-    //Call API
-    createNewCard(newCardToAdd).then(card => {
-      let newColumn = cloneDeep(column)
-      newColumn.cards.push(card)
-      newColumn.cardOrder.push(card._id)
-
-      onUpdateColumnState(newColumn)
-      setNewCardTitle('')
-      toggleOpenNewCardForm()
-    })
-
   }
 
   return (
